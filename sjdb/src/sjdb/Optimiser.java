@@ -69,8 +69,9 @@ public class Optimiser implements PlanVisitor {
 
         Operator result = op;
         List<Attribute> attributes = result.getOutput().getAttributes();
+        List<Predicate> preds = new ArrayList<>(predicates);
 
-        for (Predicate p : predicates){
+        for (Predicate p : preds){
 
             if(result.getOutput() == null) {
                 result.accept(estimator);
@@ -236,7 +237,7 @@ public class Optimiser implements PlanVisitor {
             }
         }
 
-        //printCost();
+        printCost();
 
         return cheapest;
     }
