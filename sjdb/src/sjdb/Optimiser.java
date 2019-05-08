@@ -8,11 +8,12 @@ import java.util.stream.Collectors;
 
 public class Optimiser implements PlanVisitor {
 
-    private Catalogue cat;
-    private final Estimator estimator = new Estimator();
-    private Set<Attribute> attributes = new HashSet<>();
-    private Set<Predicate> predicates = new HashSet<>();
-    private Set<Scan> scans = new HashSet<>();
+    public Catalogue cat;
+    public final Estimator estimator = new Estimator();
+    public Set<Attribute> attributes = new HashSet<>();
+    public Set<Predicate> predicates = new HashSet<>();
+    public Set<Scan> scans = new HashSet<>();
+    public int minCost = Integer.MAX_VALUE;
 
     public Optimiser(Catalogue cat) {
         this.cat = cat;
@@ -45,14 +46,12 @@ public class Optimiser implements PlanVisitor {
         // move SELECTs and PROJECTS down the tree
         List<Operator> operations = moveDown(plan,scans, predicates);
 
-        // choose the cheapest plan from the generated permutations
-
-        // return the optimised plan
+        // choose the cheapest plan from the generated permutations and return it
         return getOptimisedPlan(plan,predicates, operations);
     }
 
     // this method moves down the tree SELECT and PRODUCT operators
-    private List<Operator> moveDown(Operator root, Set<Scan> scans, Set<Predicate> predicates) {
+    public List<Operator> moveDown(Operator root, Set<Scan> scans, Set<Predicate> predicates) {
 
         List<Operator> operators = new ArrayList<>(scans.size());
 
@@ -66,7 +65,7 @@ public class Optimiser implements PlanVisitor {
     }
 
     // this method builds on the top level SELECT operators and returns the one that is closest to the root
-    private Operator createTopSelect(Operator op, Set<Predicate> predicates){
+    public Operator createTopSelect(Operator op, Set<Predicate> predicates){
 
         Operator result = op;
         List<Attribute> attributes = result.getOutput().getAttributes();
@@ -77,9 +76,7 @@ public class Optimiser implements PlanVisitor {
                 result.accept(estimator);
             }
 
-            if ((p.equalsValue() && attributes.contains(p.getLeftAttribute())) ||
-                    (!p.equalsValue() && attributes.contains(p.getLeftAttribute()) && attributes.contains(p.getRightAttribute())))
-            {
+            if ((p.equalsValue() && attributes.contains(p.getLeftAttribute())) || (!p.equalsValue() && attributes.contains(p.getLeftAttribute()) && attributes.contains(p.getRightAttribute()))) {
                 result = new Select(result, p);
                 predicates.remove(p);
             }
@@ -90,7 +87,7 @@ public class Optimiser implements PlanVisitor {
     }
 
     // this method projects only the desired attributes and returns the PROJECT operator set as a root if not all attributes are wanted, or the old root operator otherwise
-    private Operator createTopProject(Operator op, Set<Attribute> attributes){
+    public Operator createTopProject(Operator op, Set<Attribute> attributes){
 
         if(op.getOutput() == null) {
             op.accept(estimator);
@@ -109,7 +106,7 @@ public class Optimiser implements PlanVisitor {
     }
 
     // this method returns the set of attributes desired, given an operator and a list of predicates
-    private Set<Attribute> getAttributes(Operator op, List<Predicate> predicates){
+    public Set<Attribute> getAttributes(Operator op, List<Predicate> predicates){
 
         Set<Attribute> attributes = new HashSet<>();
 
@@ -131,7 +128,7 @@ public class Optimiser implements PlanVisitor {
      * if 2 operators found     -> builds a JOIN
      * if more operators found  -> builds more PRODUCTs
      */
-    private Operator build(Operator op, List<Operator> operators, List<Predicate> predicates){
+    public Operator build(Operator op, List<Operator> operators, List<Predicate> predicates){
 
         Operator result = null;
         List<Predicate> preds = new ArrayList<>(predicates);
@@ -163,7 +160,7 @@ public class Optimiser implements PlanVisitor {
                 result.accept(estimator);
             }
 
-            Set<Attribute> neededAttrs = getAttributes(op,preds);
+            Set<Attribute> neededAttrs = getAttributes(op,predicates);
 
             List<Attribute> attributes = result.getOutput().getAttributes();
 
@@ -171,9 +168,14 @@ public class Optimiser implements PlanVisitor {
             if (neededAttrs.size() == attributes.size() && attributes.containsAll(neededAttrs)){
                 operators.add(result);
             }else{
-                List<Attribute> attrs = attributes.stream().filter(neededAttrs::contains).collect(Collectors.toList());
+                List<Attribute> attrs = new ArrayList<>();
+                for (Attribute a : attributes){
+                    if (neededAttrs.contains(a)){
+                        attrs.add(a);
+                    }
+                }
 
-                if (attrs.size() == 0) {
+                if (attrs.isEmpty()) {
                     operators.add(result);
                 } else {
                     Project project = new Project(result, attrs);
@@ -202,7 +204,7 @@ public class Optimiser implements PlanVisitor {
     }
 
     // this method returns the first operator in the list which contains the given attribute
-    private Operator getOperator(List<Operator> operators, Attribute attribute){
+    public Operator getOperator(List<Operator> operators, Attribute attribute){
 
         List<Operator> ops = new ArrayList<>(operators);
 
@@ -216,10 +218,9 @@ public class Optimiser implements PlanVisitor {
     }
 
     // this method finds the cheapest query plan from all n! permutations
-    private Operator getOptimisedPlan(Operator op, Set<Predicate> predicates, List<Operator> operators){
+    public Operator getOptimisedPlan(Operator op, Set<Predicate> predicates, List<Operator> operators){
 
         Operator cheapest = null;
-        int minCost = Integer.MAX_VALUE;
         List<Predicate> preds = new ArrayList<>(predicates);
         List<List<Predicate>> permutations = permutations(preds);
 
@@ -235,13 +236,19 @@ public class Optimiser implements PlanVisitor {
             }
         }
 
-        System.out.println("The cost of the optimal query plan is:  "+ minCost);
+        //printCost();
 
         return cheapest;
     }
 
+    private void printCost() {
+        System.out.println("\n---------------------------------------------");
+        System.out.println("The cost of the optimal query plan is:  "+minCost);
+        System.out.println("---------------------------------------------\n");
+    }
+
     // this method generates a list with all permutations possible, given a list of predicates
-    private List<List<Predicate>> permutations(List<Predicate> predicates) {
+    public List<List<Predicate>> permutations(List<Predicate> predicates) {
 
         if (predicates.isEmpty()) {
             List<List<Predicate>> result = new ArrayList<>();

@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d9a73985-c751-475b-bf56-1beb96f700e4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/sjdb/Optimiser.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/sjdb/Optimiser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sjdb/Estimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sjdb/Estimator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sjdb/Optimiser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sjdb/Optimiser.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -21,6 +24,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/sjdb/Estimator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2958">
+              <caret line="178" column="43" selection-start-line="178" selection-start-column="43" selection-end-line="178" selection-end-column="43" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sjdb/Project.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -34,19 +46,19 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sjdb/Optimiser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1241">
-              <caret line="111" column="40" selection-start-line="111" selection-start-column="27" selection-end-line="111" selection-end-column="40" />
+            <state relative-caret-position="286">
+              <caret line="60" column="49" selection-start-line="60" selection-start-column="49" selection-end-line="60" selection-end-column="49" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#461#462#0" expanded="true" />
-                <element signature="e#482#483#0" expanded="true" />
-                <element signature="e#513#514#0" expanded="true" />
-                <element signature="e#572#573#0" expanded="true" />
-                <element signature="e#653#654#0" expanded="true" />
-                <element signature="e#706#707#0" expanded="true" />
+                <element signature="e#477#478#0" expanded="true" />
+                <element signature="e#507#508#0" expanded="true" />
+                <element signature="e#541#542#0" expanded="true" />
+                <element signature="e#609#610#0" expanded="true" />
+                <element signature="e#646#647#0" expanded="true" />
+                <element signature="e#699#700#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -134,11 +146,14 @@
       <find>System</find>
       <find>ops</find>
       <find>^</find>
+      <find>private</find>
+      <find>contains</find>
     </findStrings>
     <replaceStrings>
       <replace>HashSet</replace>
       <replace>ArrayList</replace>
       <replace>operators</replace>
+      <replace>public</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -148,15 +163,15 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/sjdb/SJDB.java" />
-        <option value="$PROJECT_DIR$/src/sjdb/Estimator.java" />
         <option value="$PROJECT_DIR$/src/sjdb/Test.java" />
         <option value="$PROJECT_DIR$/src/sjdb/Optimiser.java" />
+        <option value="$PROJECT_DIR$/src/sjdb/Estimator.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-4" />
-    <option name="width" value="697" />
+    <option name="x" value="588" />
+    <option name="width" value="789" />
     <option name="height" value="768" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -201,7 +216,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557284559502" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557288806760" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -231,7 +246,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Test">
+  <component name="RunManager" selected="Application.SJDB">
     <configuration name="SJDB" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="sjdb.SJDB" />
       <module name="sjdb" />
@@ -260,8 +275,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Test" />
         <item itemvalue="Application.SJDB" />
+        <item itemvalue="Application.Test" />
       </list>
     </recent_temporary>
   </component>
@@ -276,12 +291,12 @@
       <option name="presentableId" value="Default" />
       <updated>1556902904311</updated>
       <workItem from="1556902911920" duration="19728000" />
-      <workItem from="1557088625622" duration="31154000" />
+      <workItem from="1557088625622" duration="35194000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50882000" />
+    <option name="totallyTimeSpent" value="54922000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="752" extended-state="6" />
@@ -301,10 +316,10 @@
       <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="5" />
       <window_info anchor="bottom" id="Find" order="6" />
-      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.3085622" />
+      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.3457189" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.3990307" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
-      <window_info anchor="bottom" id="Messages" order="10" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32956383" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="12" />
       <window_info anchor="right" id="Coverage" side_tool="true" weight="0.32967034" />
@@ -502,13 +517,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sjdb/Estimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/sjdb/Scan.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="185">
@@ -593,17 +601,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sjdb/Optimiser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1241">
-          <caret line="111" column="40" selection-start-line="111" selection-start-column="27" selection-end-line="111" selection-end-column="40" />
+        <state relative-caret-position="286">
+          <caret line="60" column="49" selection-start-line="60" selection-start-column="49" selection-end-line="60" selection-end-column="49" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#461#462#0" expanded="true" />
-            <element signature="e#482#483#0" expanded="true" />
-            <element signature="e#513#514#0" expanded="true" />
-            <element signature="e#572#573#0" expanded="true" />
-            <element signature="e#653#654#0" expanded="true" />
-            <element signature="e#706#707#0" expanded="true" />
+            <element signature="e#477#478#0" expanded="true" />
+            <element signature="e#507#508#0" expanded="true" />
+            <element signature="e#541#542#0" expanded="true" />
+            <element signature="e#609#610#0" expanded="true" />
+            <element signature="e#646#647#0" expanded="true" />
+            <element signature="e#699#700#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sjdb/Estimator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2958">
+          <caret line="178" column="43" selection-start-line="178" selection-start-column="43" selection-end-line="178" selection-end-column="43" />
         </state>
       </provider>
     </entry>
