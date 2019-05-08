@@ -27,6 +27,7 @@ public class SJDB {
 		// create estimator visitor and apply it to canonical plan
 		Estimator est = new Estimator();
 		plan.accept(est);
+		plan.accept(new Inspector());
 		
 		// create optimised plan
 		Optimiser opt = new Optimiser(cat);

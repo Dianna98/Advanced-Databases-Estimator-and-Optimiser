@@ -75,7 +75,7 @@ public class QueryParser {
 		} else {
 			project = parseProject(projectLine, product);
 		}
-		
+		System.out.println("-----------------"+project);
 		return project;
 	}
 	
@@ -87,7 +87,7 @@ public class QueryParser {
 	public Operator parseProduct(String line) {
 		String[] rels = line.split("FROM\\s+");
 		String[] reln = rels[1].split("\\s*,\\s*");
-		
+		System.out.println("-----------------"+buildProduct(reln));
 		return buildProduct(reln);
 	}
 	
@@ -109,7 +109,7 @@ public class QueryParser {
 				left = accum;
 			}
 		}
-		
+		System.out.println("-----------------"+left);
 		return left;
 	}
 	
@@ -126,6 +126,7 @@ public class QueryParser {
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
+		System.out.println("-----------------"+op);
 		return op;
 	}
 	
@@ -144,7 +145,7 @@ public class QueryParser {
 		for (int i=0; i<pred.length; i++) {
 			ret = buildSelect(pred[i].trim(), ret);
 		}
-		
+		System.out.println("-----------------"+ret);
 		return ret;
 	}
 	
@@ -165,7 +166,7 @@ public class QueryParser {
 			String[] atts = pred.split("=");
 			ret = new Predicate(new Attribute(atts[0]), new Attribute(atts[1]));
 		}
-		
+		System.out.println("-----------------"+new Select(op, ret));
 		return new Select(op, ret);
 	}
 	
@@ -178,6 +179,7 @@ public class QueryParser {
 	private Operator parseProject(String line, Operator op) {
 		String[] atts = line.split("SELECT\\s+");		
 		if (atts[1].trim().equals("*")) {
+			System.out.println("-----------------"+op);
 			return op;
 		} else {
 			String[] attr = atts[1].split("\\s*,\\s*");
@@ -186,7 +188,7 @@ public class QueryParser {
 			for (int i=0; i<attr.length; i++) {
 				attributes.add(new Attribute(attr[i].trim()));
 			}
-
+			System.out.println("-----------------"+new Project(op,attributes));
 			return new Project(op, attributes);
 		}
 	}
