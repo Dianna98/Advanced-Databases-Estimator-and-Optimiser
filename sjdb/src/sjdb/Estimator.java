@@ -11,14 +11,8 @@ public class  Estimator implements PlanVisitor {
 	protected int cost;
 
 	public Estimator() {
-		// empty constructor
 	}
 
-	/* 
-	 * Create output relation on Scan operator
-	 *
-	 * Example implementation of visit method for Scan operators.
-	 */
 	public void visit(Scan op) {
 		Relation input = op.getRelation();
 		Relation output = new Relation(input.getTupleCount());
@@ -33,6 +27,7 @@ public class  Estimator implements PlanVisitor {
 		//System.out.println(cost);
 	}
 
+	// T(PROJECT_[A](R)) = T(R)
 	public void visit(Project op) {
 		Relation input = op.getInput().getOutput();
 		Relation output = new Relation(input.getTupleCount());
@@ -55,10 +50,17 @@ public class  Estimator implements PlanVisitor {
 		//System.out.println(cost);
 
 	}
-	
+
+	// attr = val
+	// T(SELECT_[A=C](R)) = T(R)/V(R,A)
+	// V(SELECT_[A=C](R), A) = 1
+	//
+	// attr = attr
+	// T(SELECT_[A=B](R)) = T(R)/max(V(R,A),V(R,B))
+	// V(SELECT_[A=B](R), A) = V(SELECT_[A=B](R), B) = min(V(R, A), V(R, B)
 	public void visit(Select op) {
 		Relation input = op.getInput().getOutput();
-		Relation output = null;
+		Relation output;
 
 		Predicate p = op.getPredicate();
 		Attribute leftAttr = input.getAttribute(p.getLeftAttribute());
@@ -106,7 +108,8 @@ public class  Estimator implements PlanVisitor {
 		//System.out.println(cost);
 
 	}
-	
+
+	// T(R * S) = T(R)T(S)
 	public void visit(Product op) {
 		Relation inLeft = op.getLeft().getOutput();
 		Relation inRight = op.getRight().getOutput();
@@ -128,7 +131,10 @@ public class  Estimator implements PlanVisitor {
 		//System.out.println(cost);
 
 	}
-	
+
+	//T(R JOIN_[A=B] S) = T(R)T(S)/max(V(R,A),V(S,B))
+	// V(R JOIN_[A=B] S, A) = V(R JOIN_[A=B] S, B) = min(V(R, A), V(S, B))
+	// V(R JOIN_[A=B] S, C) = V(R, C)
 	public void visit(Join op) {
 		Relation inLeft = op.getLeft().getOutput();
 		Relation inRight = op.getRight().getOutput();
@@ -170,6 +176,7 @@ public class  Estimator implements PlanVisitor {
 
 	}
 
+	// this method prints the estimate cost
 	protected int getCost(Operator o){
 		cost=0;
 		o.accept(this);
