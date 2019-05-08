@@ -4,27 +4,30 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Optimiser implements PlanVisitor {
 
     public Catalogue cat;
     public final Estimator estimator = new Estimator();
     public Set<Attribute> attributes = new HashSet<>();
+    public Set<Attribute> finalAttributes = new HashSet<>();
     public Set<Predicate> predicates = new HashSet<>();
     public Set<Scan> scans = new HashSet<>();
     public int minCost = Integer.MAX_VALUE;
+    public boolean check = false;
 
     public Optimiser(Catalogue cat) {
         this.cat = cat;
     }
 
     public void visit(Scan op) {
-        scans.add(new Scan((NamedRelation)op.getRelation()));
+        scans.add(op);
+        attributes.addAll(op.getOutput().getAttributes());
     }
 
     public void visit(Project op) {
-        attributes.addAll(op.getAttributes());
+        check = true;
+        finalAttributes.addAll(op.getAttributes());
     }
 
     public void visit(Product op) {}
@@ -58,7 +61,7 @@ public class Optimiser implements PlanVisitor {
         for (Scan s: scans){
             Operator o = createTopSelect(s, predicates);
             List<Predicate> pred = new ArrayList<>(predicates);
-            operators.add(createTopProject(o, getAttributes(root,pred)));
+            operators.add(createTopProject(o, getDesiredAttributes(root,pred)));
         }
 
         return operators;
@@ -97,7 +100,7 @@ public class Optimiser implements PlanVisitor {
         List<Attribute> attrs = new ArrayList<>(attributes);
         attrs.retainAll(op.getOutput().getAttributes());
 
-        if (!attrs.isEmpty()) {
+        if (!attrs.isEmpty() && !(op instanceof Project)) {
             Operator o = new Project(op, attrs);
             o.accept(estimator);
             return o;
@@ -107,9 +110,14 @@ public class Optimiser implements PlanVisitor {
     }
 
     // this method returns the set of attributes desired, given an operator and a list of predicates
-    public Set<Attribute> getAttributes(Operator op, List<Predicate> predicates){
+    public Set<Attribute> getDesiredAttributes(Operator op, List<Predicate> predicates){
 
         Set<Attribute> attributes = new HashSet<>();
+        //System.out.println("-------------------------------------"+check);
+        if (!check){
+            //System.out.println(this.attributes.toString());
+            return this.attributes;
+        }
 
         for(Predicate p : predicates){
             attributes.add(p.getLeftAttribute());
@@ -117,9 +125,7 @@ public class Optimiser implements PlanVisitor {
                 attributes.add(p.getRightAttribute());
             }
         }
-
-        if (op instanceof Project) attributes.addAll(((Project) op).getAttributes());
-
+        attributes.addAll(getFinalAttributes());
         return attributes;
     }
 
@@ -133,6 +139,7 @@ public class Optimiser implements PlanVisitor {
 
         Operator result = null;
         List<Predicate> preds = new ArrayList<>(predicates);
+        //removeDuplicates(operators);
 
         if (operators.size() == 1){
             result = operators.get(0);
@@ -152,6 +159,8 @@ public class Optimiser implements PlanVisitor {
             }
 
             // build JOIN
+            //System.out.println("<<<<<<<<<<<<<<<<<<"+left.toString());
+            //System.out.println(">>>>>>>>>>>>>>>>>>"+right.toString());
             if(left != null && right != null){
                 result = new Join(left, right, p);
                 predicates.remove(p);
@@ -161,7 +170,7 @@ public class Optimiser implements PlanVisitor {
                 result.accept(estimator);
             }
 
-            Set<Attribute> neededAttrs = getAttributes(op,predicates);
+            Set<Attribute> neededAttrs = getDesiredAttributes(op,predicates);
 
             List<Attribute> attributes = result.getOutput().getAttributes();
 
@@ -181,7 +190,9 @@ public class Optimiser implements PlanVisitor {
                 } else {
                     Project project = new Project(result, attrs);
                     project.accept(estimator);
-                    operators.add(project);
+                    if (!(result instanceof Project)) {
+                        operators.add(project);
+                    }
                 }
             }
         }
@@ -208,6 +219,7 @@ public class Optimiser implements PlanVisitor {
     public Operator getOperator(List<Operator> operators, Attribute attribute){
 
         List<Operator> ops = new ArrayList<>(operators);
+        //removeDuplicates(ops);
 
         for (Operator o : ops){
             if (o.getOutput().getAttributes().contains(attribute)){
@@ -221,6 +233,7 @@ public class Optimiser implements PlanVisitor {
     // this method finds the cheapest query plan from all n! permutations
     public Operator getOptimisedPlan(Operator op, Set<Predicate> predicates, List<Operator> operators){
 
+        //removeDuplicates(operators);
         Operator cheapest = null;
         List<Predicate> preds = new ArrayList<>(predicates);
         List<List<Predicate>> permutations = permutations(preds);
@@ -237,7 +250,7 @@ public class Optimiser implements PlanVisitor {
             }
         }
 
-        printCost();
+        //printCost();
 
         return cheapest;
     }
@@ -271,5 +284,34 @@ public class Optimiser implements PlanVisitor {
 
         return list;
     }
+
+    public Set<Attribute> getFinalAttributes(){
+        if (!check){
+            return attributes;
+        } else{
+            return finalAttributes;
+        }
+    }
+
+//    public List<Operator> removeDuplicates(List<Operator> ops){
+//        Set<Attribute> attrs = new HashSet<>();
+//        List<Operator> op = new ArrayList<>(ops);
+//        for (Operator o : op){
+//            if (o instanceof Project){
+//                if (attrs.contains(((Project) o).getAttributes())){
+//                    ops.remove(o);
+//                }
+//                attrs.addAll(((Project) o).getAttributes());
+//            }
+//        }
+//        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"+ops.toString());
+////        Set<Operator> op = new HashSet<>();
+////        for(Operator o :ops){
+////            op.add(o);
+////        }
+////        ops.clear();
+////        ops.addAll(op);
+//        return ops;
+//    }
 
 }
