@@ -30,7 +30,7 @@ public class  Estimator implements PlanVisitor {
 		
 		op.setOutput(output);
 		cost+=output.getTupleCount();
-		System.out.println(cost);
+		//System.out.println(cost);
 	}
 
 	public void visit(Project op) {
@@ -52,7 +52,7 @@ public class  Estimator implements PlanVisitor {
 
 		op.setOutput(output);
 		cost+=output.getTupleCount();
-		System.out.println(cost);
+		//System.out.println(cost);
 
 	}
 	
@@ -103,7 +103,7 @@ public class  Estimator implements PlanVisitor {
 
 		op.setOutput(output);
 		cost+=output.getTupleCount();
-		System.out.println(cost);
+		//System.out.println(cost);
 
 	}
 	
@@ -125,7 +125,7 @@ public class  Estimator implements PlanVisitor {
 
 		op.setOutput(output);
 		cost+=output.getTupleCount();
-		System.out.println(cost);
+		//System.out.println(cost);
 
 	}
 	
@@ -166,11 +166,13 @@ public class  Estimator implements PlanVisitor {
 
 		op.setOutput(output);
 		cost+=output.getTupleCount();
-		System.out.println(cost);
+		//System.out.println(cost);
 
 	}
 
-	protected int getCost(){
+	protected int getCost(Operator o){
+		cost=0;
+		o.accept(this);
 		return cost;
 	}
 }

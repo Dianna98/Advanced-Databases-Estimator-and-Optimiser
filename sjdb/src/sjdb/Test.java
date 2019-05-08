@@ -13,10 +13,10 @@ public class Test {
         Operator plan = query(catalogue);
         plan.accept(estimator);
         plan.accept(inspector);
-       // Optimiser optimiser = new Optimiser(catalogue);
-       // Operator planopt = optimiser.optimise(plan);
-       // planopt.accept(estimator);
-       // planopt.accept(inspector);
+        Optimiser optimiser = new Optimiser(catalogue);
+        Operator planopt = optimiser.optimise(plan);
+        planopt.accept(estimator);
+        planopt.accept(inspector);
     }
     public static Catalogue createCatalogue() {
         Catalogue cat = new Catalogue();
